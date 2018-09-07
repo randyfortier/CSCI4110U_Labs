@@ -146,7 +146,7 @@ int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
     glutInitWindowSize(800, 600);
-    windowId = glutCreateWindow("Lab 02");
+    windowId = glutCreateWindow("Lab 03");
     glutIdleFunc(&update);
     glutDisplayFunc(&render);
     glutReshapeFunc(&reshape);
