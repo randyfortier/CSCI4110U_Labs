@@ -34,50 +34,27 @@ float zRotation = 0.0f;
 
 float yRotationSpeed = 0.1f;
 
-float minArmRotation = 45.0f;
-float maxArmRotation = 160.0f;
-float upperArmRotation = 45.0f;
-float upperArmRotationSpeed = 1.0f;
-
-void drawFinger(glm::vec3 basePosition);
-void drawCube(glm::mat4 modelMatrix, glm::vec4 colour);
+void drawLine(glm::mat4 modelMatrix, glm::vec4 colour);
 static GLuint createShaderProgram(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
 static GLuint createShader(const GLenum shaderType, const std::string shaderSource);
 
 static const GLfloat vertexPositionData[] = {
-    -1.0f, -1.0f,  1.0f,  // front
-     1.0f, -1.0f,  1.0f,
-    -1.0f,  1.0f,  1.0f,
-     1.0f,  1.0f,  1.0f,
-    -1.0f, -1.0f, -1.0f,  // back
-     1.0f, -1.0f, -1.0f,
-    -1.0f,  1.0f, -1.0f,
-     1.0f,  1.0f, -1.0f
+    -1.00f,  0.00f,  0.00f,
+    -0.75f, -0.25f, -0.25f,
+    -0.50f,  0.00f, -0.50f,
+    -0.25f,  0.25f, -0.50f,
+     0.00f,  0.25f, -0.25f,
+     0.25f,  0.50f,  0.00f,
+     0.50f,  0.00f,  0.25f,
+     0.75f, -0.25f,  0.25f,
+     1.00f, -0.50f,  0.00f
 };
-static const GLushort indexData[] = {
-  0, 1, 2,   // front
-  3, 2, 1,
-  5, 6, 7,   // back
-  5, 4, 6,
-  1, 7, 3,   // right
-  1, 5, 7,
-  4, 0, 2,   // left
-  4, 2, 6,
-  2, 7, 6,   // top
-  2, 3, 7,
-  0, 4, 5,   // bottom
-  0, 5, 1
-};
-int numVertices = 36;
+int numVertices = 9;
 
 static void createGeometry(void) {
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositionData), vertexPositionData, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexData), indexData, GL_STATIC_DRAW);
 }
 
 static void update(void) {
@@ -99,29 +76,19 @@ static void render(void) {
   glUseProgram(programId);
 
   // colours
-  glm::vec4 red(0.8, 0.0, 0.0, 1.0);
+  glm::vec4 white(1.0, 1.0, 1.0, 1.0);
 
   glm::mat4 modelMatrix = glm::mat4(1.0f);
-  modelMatrix = glm::scale(modelMatrix, glm::vec3(2.4f, 2.4f, 0.5f));
-  modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, -1.5f, 0.0f));
-  drawCube(modelMatrix, red);
-
-  // TODO:  Draw the fingers (and thumb)
+  modelMatrix = glm::scale(modelMatrix, glm::vec3(5.0f, 5.0f, 5.0f));
+  modelMatrix = glm::rotate(modelMatrix, glm::radians(yRotation), glm::vec3(0.0f, 1.0f, 0.0f));
+  //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, -1.5f, 0.0f));
+  drawLine(modelMatrix, white);
 
   // make the draw buffer to display buffer (i.e. display what we have drawn)
   glutSwapBuffers();
 }
 
-void drawFinger(glm::vec3 basePosition) {
-  // colours
-  glm::vec4 colour1(0.8, 0.0, 0.5, 1.0);
-  glm::vec4 colour2(0.0, 0.0, 0.8, 1.0);
-  glm::vec4 colour3(0.0, 0.5, 0.5, 1.0);
-
-  // TODO:  Draw three transformed cubes to make the finger
-}
-
-void drawCube(glm::mat4 modelMatrix, glm::vec4 colour) {
+void drawLine(glm::mat4 modelMatrix, glm::vec4 colour) {
   // model-view-projection matrix
   glm::mat4 mvp = projectionMatrix * viewMatrix * modelMatrix;
   GLuint mvpMatrixId = glGetUniformLocation(programId, "u_MVP");
@@ -138,9 +105,8 @@ void drawCube(glm::mat4 modelMatrix, glm::vec4 colour) {
   glVertexAttribPointer(positionBufferId, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3, (void *)0);
   glEnableVertexAttribArray(positionBufferId);
 
-  // draw the triangle strip
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-  glDrawElements(GL_TRIANGLES, numVertices, GL_UNSIGNED_SHORT, (void*)0);
+  // draw the line strip
+  glDrawArrays(GL_LINE_STRIP, 0, numVertices);
 
   // disable the attribute array
   glDisableVertexAttribArray(positionBufferId);
