@@ -141,22 +141,23 @@ void ObjMesh::load(const std::string filename, const bool autoCentre = false, co
 				       &p2, &t2, &n2,
 				       &p3, &t3, &n3);
 
-				positionIndices.push_back(p1 - 1);
- 				positionIndices.push_back(p2 - 1);
- 				positionIndices.push_back(p3 - 1);
+				positionIndices.push_back(p1);// - 1);
+ 				positionIndices.push_back(p2);// - 1);
+ 				positionIndices.push_back(p3);// - 1);
 
-				textureCoordIndices.push_back(t1 - 1);
-				textureCoordIndices.push_back(t2 - 1);
-				textureCoordIndices.push_back(t3 - 1);
+				textureCoordIndices.push_back(t1);// - 1);
+				textureCoordIndices.push_back(t2);// - 1);
+				textureCoordIndices.push_back(t3);// - 1);
 
-				normalIndices.push_back(n1 - 1);
-				normalIndices.push_back(n2 - 1);
-				normalIndices.push_back(n3 - 1);
+				normalIndices.push_back(n1);// - 1);
+				normalIndices.push_back(n2);// - 1);
+				normalIndices.push_back(n3);// - 1);
 
 				this->numTriangles++;
 			}
 		}
 	}
+
 	this->numIndexedVertices = this->numTriangles * 3;
 
 	// for auto-centering

@@ -48,11 +48,15 @@ float lastY = std::numeric_limits<float>::infinity();
 
 static void createGeometry(void) {
   // TODO:  Change to Cylinder
-  UVSphere sphere(1.0, 12, 12);
+  UVSphere sphere(1.0, 6, 6);
   sphere.save("my_sphere.obj");
+
+  std::cout << "Finished generating sphere geometry." << std::endl;
 
   ObjMesh mesh;
   mesh.load("my_sphere.obj", true, true);
+
+  std::cout << "Finished loading sphere .obj file." << std::endl;
 
   numVertices = mesh.getNumIndexedVertices();
   Vector3* vertexPositions = mesh.getIndexedPositions();
